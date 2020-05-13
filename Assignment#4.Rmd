@@ -17,43 +17,51 @@ library(deSolve)
 
 Input the model for forest growth
 ```{r}
-forest<- function(initial_kgC, early_growth, later_growth, K, canopy_thresh, temp, time){
+forest<- function(time, initial_kgC, parms){
 
+  
+  # define the parms
+  early_growth<- parms$early_growth
+  later_growth<- parms$later_growth
+  K<- parms$K
+  canopy_thresh<- parms$canopy_thresh
+  temp<- parms$temp
+  
   # Set the initial size of forest
   kgC = initial_kgC
   
-  # Calculate the growth rate at each time step in a for loop
-  for (i in 1:time) {
-    
-    kgC = ifelse(kgC < canopy_thresh, kgC * early_growth, kgC)
-    kgC = ifelse(temp < 0, 0, kgC)
-    kgC = ifelse(kgC > canopy_thresh, kgC*later_growth, kgC)
-    kgC = ifelse(kgC >= K, 0, kgC)
-    
-  }
+  if(temp < 0) {kgC = 0}
+  else if(kgC < canopy_thresh) {kgC * early_growth}
+  else if(kgC > canopy_thresh) {kgC * later_growth}
+  else(kgC >= K) {kgC = K}
+  
+  
+    #kgC = ifelse(temp < 0, 0, kgC)
+    #kgC = ifelse(kgC < canopy_thresh, kgC * early_growth, kgC)
+    #kgC = ifelse(kgC > canopy_thresh, kgC * later_growth, kgC)
+    #kgC = ifelse(kgC >= K, kgC, kgC)
+  
   return(list(kgC))
 }
 
 ```
 
-Save the input parameters
+Set up the time 
 ```{r}
-initial_kgC = 10
-early_growth = 0.01
-later_growth = 2
-K = 500
-canopy_thresh = 100
-temp = 20
-time = seq(from=1, to=300)
+time = seq(from=1, to=300, by=1)
 ```
 
 Run the ODE solver
 ```{r}
 # set up the parms
-parms = list(early_growth, later_growth, K, canopy_thresh, temp)
+parms = list(early_growth = 0.01, later_growth = 2, K = 500, canopy_thresh = 100, temp = 20)
 
 # Run the ODE
 results = ode(y = initial_kgC, times = time, func = forest, parms = parms)
+
+head(results)
+
+plot(results)
 
 ```
 
