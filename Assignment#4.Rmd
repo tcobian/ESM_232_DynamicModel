@@ -30,16 +30,21 @@ forest<- function(time, initial_kgC, parms){
   # Set the initial size of forest
   kgC = initial_kgC
   
-  if(temp < 0) {kgC = 0}
-  else if(kgC < canopy_thresh) {kgC * early_growth}
-  else if(kgC > canopy_thresh) {kgC * later_growth}
-  else(kgC >= K) {kgC = K}
+  if (temp < 0) {
+    kgC = 0
+  } else if (kgC < canopy_thresh) {
+      kgC * early_growth
+  } else if (kgC > canopy_thresh) {
+      kgC * later_growth
+  } else (kgC >= K) {
+    kgC = K
+  }
   
   
-    #kgC = ifelse(temp < 0, 0, kgC)
-    #kgC = ifelse(kgC < canopy_thresh, kgC * early_growth, kgC)
-    #kgC = ifelse(kgC > canopy_thresh, kgC * later_growth, kgC)
-    #kgC = ifelse(kgC >= K, kgC, kgC)
+  #ifelse(temp < 0, 0, kgC)
+  #ifelse(kgC < canopy_thresh, kgC * early_growth, kgC)
+  #ifelse(kgC > canopy_thresh, kgC * later_growth, kgC)
+  #ifelse(kgC >= K, kgC, kgC)
   
   return(list(kgC))
 }
