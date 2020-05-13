@@ -35,6 +35,33 @@ forest<- function(initial_kgC, early_growth, later_growth, K, canopy_thresh, tem
     }
 ```
 
+Save the input parameters
+```{r}
+initial_kgC = 10
+early_growth = 0.01
+later_growth = 2
+K = 500
+canopy_thresh = 100
+temp = 20
+time = 300
+```
+
+Run the ODE solver
+```{r}
+# set up the parms
+parms = list(early_growth, later_growth, K, canopy_thresh, temp)
+
+# Run the ODE
+results = ode(initial_kgC, time, forest, parms)
+
+```
+
+
+
+
+
+
+
 
 
 
