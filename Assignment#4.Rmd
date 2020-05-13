@@ -25,13 +25,13 @@ forest<- function(initial_kgC, early_growth, later_growth, K, canopy_thresh, tem
   # Calculate the growth rate at each time step in a for loop
   for (i in 1:time) {
     
-    kgC = kgC * early_growth
+    kgC = ifelse(kgC < canopy_thresh, kgC * early_growth, kgC)
     kgC = ifelse(temp < 0, 0, kgC)
     kgC = ifelse(kgC > canopy_thresh, kgC*later_growth, kgC)
     kgC = ifelse(kgC >= K, 0, kgC)
     
   }
-  return(kgC)
+  return(list(kgC))
     }
 ```
 
@@ -52,7 +52,7 @@ Run the ODE solver
 parms = list(early_growth, later_growth, K, canopy_thresh, temp)
 
 # Run the ODE
-results = ode(initial_kgC, time, forest, parms)
+results = ode(initial_kgC, time, func = forest, parms)
 
 ```
 
