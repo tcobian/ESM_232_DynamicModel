@@ -32,7 +32,8 @@ forest<- function(initial_kgC, early_growth, later_growth, K, canopy_thresh, tem
     
   }
   return(list(kgC))
-    }
+}
+
 ```
 
 Save the input parameters
@@ -43,7 +44,7 @@ later_growth = 2
 K = 500
 canopy_thresh = 100
 temp = 20
-time = 300
+time = seq(from=1, to=300)
 ```
 
 Run the ODE solver
