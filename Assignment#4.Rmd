@@ -52,7 +52,7 @@ Run the ODE solver
 parms = list(early_growth, later_growth, K, canopy_thresh, temp)
 
 # Run the ODE
-results = ode(initial_kgC, time, func = forest, parms)
+results = ode(y = initial_kgC, times = time, func = forest, parms = parms)
 
 ```
 
