@@ -41,10 +41,10 @@ forest<- function(time, initial_kgC, parms){
   }
   
   
-  #ifelse(temp < 0, 0, kgC)
-  #ifelse(kgC < canopy_thresh, kgC * early_growth, kgC)
-  #ifelse(kgC > canopy_thresh, kgC * later_growth, kgC)
-  #ifelse(kgC >= K, kgC, kgC)
+#  ifelse(temp < 0, 0, kgC)
+#  ifelse(kgC < canopy_thresh, kgC * early_growth, kgC)
+#  ifelse(kgC > canopy_thresh, kgC * later_growth, kgC)
+#  ifelse(kgC >= K, kgC, kgC)
   
   return(list(kgC))
 }
@@ -53,7 +53,7 @@ forest<- function(time, initial_kgC, parms){
 
 Set up the time 
 ```{r}
-time = seq(from=1, to=300, by=1)
+time = seq(from=1, to=500, by=1)
 ```
 
 Run the ODE solver
