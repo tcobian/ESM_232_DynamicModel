@@ -73,7 +73,17 @@ results = ode(y = initial_kgC, times = time, func = forest, parms = parms)
 
 head(results)
 
-plot(results)
+# clean up the results data and save as dataframe
+colnames(results)<- c("time", "kgC")
+results_df = as.data.frame(unlist(results))
+
+
+# plot the results of the ODE run
+forest_plot<- ggplot(data = results_df, aes(x = time, y = kgC))+
+  geom_line(colour = "cyan4")+
+  labs(title = "Dyanmic Forest Growth")+
+  theme_minimal()
+forest_plot
 
 ```
 
