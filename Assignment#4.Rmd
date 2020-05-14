@@ -36,7 +36,7 @@ forest<- function(time, initial_kgC, parms){
       kgC * early_growth
   } else if (kgC > canopy_thresh) {
       kgC * later_growth
-  } else (kgC >= K) {
+  } else {
     kgC = K
   }
   
@@ -51,9 +51,11 @@ forest<- function(time, initial_kgC, parms){
 
 ```
 
-Set up the time 
+Set up the time and initial kgC
 ```{r}
 time = seq(from=1, to=500, by=1)
+
+initial_kgC = 10
 ```
 
 Run the ODE solver
