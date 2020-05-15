@@ -31,9 +31,14 @@ forest<- function(time, initial_kgC, parms){
   kgC = initial_kgC
   
 if (kgC > canopy_thresh) return(list(kgC * early_growth))
+  
 if (kgC < canopy_thresh) return(list(kgC * later_growth))
+  
+if (kgC > K) return(list(kgC = K))
+  
 if (temp < 0) return(list(kgC * 0))
-if (kgC >= K) return(list(kgC = K))
+
+
 
 }
 
