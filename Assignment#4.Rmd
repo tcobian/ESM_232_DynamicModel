@@ -13,6 +13,7 @@ Install the packages
 ```{r}
 library(tidyverse)
 library(deSolve)
+library(sensitivity)
 ```
 
 Input the model for forest growth
@@ -76,16 +77,81 @@ forest_plot
 ```
 
 Run a sensativity analysis
-```{r}
-# number of runs
-np = 500
 
-# make a distribution for early and later growth
-early_growth = rnorm(mean = 0.01, sd = 0.001, n = np)
-later_growth = rnorm(mean = 2, sd = 0.05, n = np)
+```{r Sobel}
+forest2 <- function(time, initial_kgC, early_growth, later_growth, K, canopy_thresh, temp){
+
+  
+  # define the parms
+  early_growth <- early_growth
+  later_growth <- later_growth
+  K<- K
+  canopy_thresh <- canopy_thresh
+  temp<- temp
+  
+  # Set the initial size of forest
+  kgC = initial_kgC
+  
+if (kgC > canopy_thresh) return(kgC * early_growth)
+if (kgC < canopy_thresh) return(kgC * later_growth)
+if (temp < 0) return(kgC * 0)
+if (kgC >= K) return(kgC = K)
+
+}
+
+time = seq(from=1, to=300, by=1)
+initial_kgC = 10
+early_growth = 0.01
+later_growth = 2
+K = 500
+canopy_thresh = 100
+temp = 20
+
+np=10000
+early_growth = rnorm(mean=0.1,sd=0.02, n=np) 
+later_growth = rnorm(mean=2,sd=0.4, n=np)
+
+# generate two examples of random number from parmeter distributions
+
+X1 = cbind.data.frame(early_growth, later_growth)
+
+# repeat sampling
+early_growth = rnorm(mean=0.1,sd=0.02, n=np) 
+later_growth = rnorm(mean=2,sd=0.4, n=np)
+
+X2 = cbind.data.frame(early_growth, later_growth)
+
+sens_forest_sobel = sobol2007(model = NULL, X1, X2, nboot = 100)
+
+#parms = list(early_growth = 0.01, later_growth = 2, K = 500, canopy_thresh = 100, temp = 20)
+
+# run model for all parameter sets
+res = mapply(FUN=forest2, 
+             early_growth=sens_forest_sobel$X$early_growth,
+             later_growth=sens_forest_sobel$X$later_growth,
+             MoreArgs=list(initial_kgC = 10, K=500, canopy_thresh=100, temp=20))
+
+sens_forest_sobel = sensitivity::tell(sens_forest_sobel, res, res.names="ga")
+
+# first-order indices 
+sens_forest_sobel$S
+
+# total sensitivity index 
+sens_forest_sobel$T
+
+print(sens_forest_sobel)
+plot(sens_forest_sobel)
+
+
+# make a data frame for plotting
+both = cbind.data.frame(sens_forest_sobel$X, gs=sens_forest_sobel$y)
+
+### These plots do not look correct
+#look at response of conductance to the two most important variables
+#ggplot(both, aes(early_growth, gs))+geom_point()+labs(y="kgC", x="Early Growth")
+#ggplot(both, aes(later_growth, gs))+geom_point()+labs(y="kgC", x="Later Growth")
+
 ```
-
-
 
 
 
